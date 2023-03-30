@@ -17,23 +17,51 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=10)
 def home():
     page = pv.Page()
     page.add_header("NBA WEST rank board")
-    data = []
-    columns = ['rank', 'team', 'win', 'loss']
 
-    try:
-        connection = sqlite3.connect('./service/rank.db')
-        cursor = connection.cursor()
-        cursor.execute('SELECT rank, team, win, loss FROM t_nba_rank')
-        for rank, team, win, loss in cursor.fetchall():
-            data.append([rank, team, win, loss])
-        cursor.close()
-        connection.close()
-    except Exception as ex:
-        print(ex)
+    data = get_rank_data_from_db(west=True)
+    columns = ['rank', 'team', 'win', 'loss']
 
     df = pd.DataFrame(data, columns=columns)
     page.add_pandastable(df)
     return page.to_html()
+
+
+@app.route('/east', methods=['GET', 'POST'])
+def east_rank():
+    page = pv.Page()
+    page.add_header("NBA EAST rank board")
+    page.add
+
+    data = get_rank_data_from_db(west=False)
+    columns = ['rank', 'team', 'win', 'loss']
+
+    df = pd.DataFrame(data, columns=columns)
+    page.add_pandastable(df)
+    return page.to_html()
+
+
+def get_rank_data_from_db(west=True):
+    data = []
+    connection, cursor = None, None
+    try:
+        connection = sqlite3.connect('./service/rank.db')
+        cursor = connection.cursor()
+        if west:
+            cursor.execute('SELECT rank, team, win, loss FROM t_nba_rank WHERE east_west=1')
+        else:
+            cursor.execute('SELECT rank, team, win, loss FROM t_nba_rank WHERE east_west=0')
+        for rank, team, win, loss in cursor.fetchall():
+            data.append([rank, team, win, loss])
+    except Exception as ex:
+        print(ex)
+    finally:
+        try:
+            cursor.close()
+            connection.close()
+        except:
+            pass
+
+    return data
 
 
 def daemonize(b_stat):

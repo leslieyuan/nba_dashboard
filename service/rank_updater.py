@@ -34,10 +34,6 @@ class RankUpdater(object):
         update_data = []
         # 找到排名表格
         for i, east_west in enumerate(soup.findAll('div', {'class': str(nba_div_class)})):
-            # 跳过east
-            if i == 0:
-                print('no east')
-                continue
             for j, row in enumerate(east_west.findAll('tr')):
                 # 跳过表头
                 if j == 0:
@@ -50,7 +46,7 @@ class RankUpdater(object):
                 win = all_td[1].text.strip()
                 loss = all_td[2].text.strip()
 
-                update_data.append([rank, win, loss, team])
+                update_data.append([rank, win, loss, team, i])
                 #print('rank {:2} | team {:30} | win {:4} | loss {:4}'.format(rank, team, win, loss))
         # close chrome
         driver.quit()
@@ -63,7 +59,7 @@ class RankUpdater(object):
         try:
             connection = sqlite3.connect('./rank.db')
             cursor = connection.cursor()
-            cursor.executemany('INSERT OR REPLACE INTO t_nba_rank(rank, win, loss, team) VALUES(?,?,?,?)', rank_list)
+            cursor.executemany('INSERT OR REPLACE INTO t_nba_rank(rank, win, loss, team, east_west) VALUES(?,?,?,?,?)', rank_list)
             connection.commit()
             cursor.close()
             connection.close()

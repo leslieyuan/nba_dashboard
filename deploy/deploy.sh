@@ -30,7 +30,11 @@ sleep 10
 # 4
 echo "start app..."
 cd "${curdir}/.."
-nohup python3 app.py > ./web_app.log 2>&1 &
+if [ "$1" == "debug" ] ;then
+    python3 app.py
+else
+    nohup python3 app.py > ./web_app.log 2>&1 &
+fi
 
 echo "deploy success!"
 
