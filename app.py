@@ -40,6 +40,34 @@ def east_rank():
     return page.to_html()
 
 
+@app.route('/pics', methods=['GET', 'POST'])
+def pics():
+    page = pv.Page()
+    page.add_header("Pictures from AI")
+    cc = page.add_container(grid_columns=3)
+    card1 = cc.add_card()
+    card2 = cc.add_card()
+    card3 = cc.add_card()
+    card4 = cc.add_card()
+    card5 = cc.add_card()
+    card6 = cc.add_card()
+
+    card1.add_image(url='https://raw.githubusercontent.com/leslieyuan/leslieyuan.github.io/master/pics/cat_on_wall.png',
+                   alt='cat on wall')
+    card2.add_image(url='https://github.com/leslieyuan/leslieyuan.github.io/blob/master/pics/dolphin_1.png?raw=true',
+                   alt='dolphin')
+    card3.add_image(url='https://github.com/leslieyuan/leslieyuan.github.io/blob/master/pics/dolphin_2.png?raw=true',
+                   alt='dolphin')
+    card4.add_image(url='https://github.com/leslieyuan/leslieyuan.github.io/blob/master/pics/cat_1.png?raw=true',
+                    alt='cat')
+    card5.add_image(url='https://github.com/leslieyuan/leslieyuan.github.io/blob/master/pics/dolphin_3.png?raw=true',
+                    alt='dolphin')
+    card6.add_image(url='https://github.com/leslieyuan/leslieyuan.github.io/blob/master/pics/woman_1.png?raw=true',
+                    alt='woman')
+
+    return page.to_html()
+
+
 def get_rank_data_from_db(west=True):
     data = []
     connection, cursor = None, None
