@@ -1,4 +1,6 @@
 # nba_dashboard
+<img width="1544" alt="image" src="https://user-images.githubusercontent.com/2480615/230000782-20f7e594-a1c9-4c14-b664-566a11f652a3.png">
+
 a very simple web show the rank of NBA on regular season.
 
 route / display west.
